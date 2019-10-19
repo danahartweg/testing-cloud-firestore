@@ -1,0 +1,33 @@
+stages:
+  - validate
+  - test
+  - firestore
+
+validate:server:
+  image: node:10.16.1-alpine
+  stage: validate
+  script:
+    - cd server
+    - yarn install
+    - yarn lint
+    - yarn validate
+
+test:server:
+  image: dhartweg/node-java-yarn-firebase:10.14.2-7.2.1
+  stage: test
+  script:
+    - cd server
+    - yarn install
+    - firebase use your-project-name --token $FIREBASE_TEST_RUNNER_TOKEN
+    - FIREBASE_TOKEN=$FIREBASE_TEST_RUNNER_TOKEN yarn test
+
+firestore:dev:
+  image: andreysenov/firebase-tools
+  stage: firestore
+  only:
+    - dev
+  script:
+    - cd server
+    - yarn install
+    - firebase use --token $FIREBASE_DEV_DEPLOY_TOKEN your-project-name
+    - firebase deploy -m "Pipeline $CI_PIPELINE_ID, build $CI_BUILD_ID" --non-interactive --token $FIREBASE_DEV_DEPLOY_TOKEN

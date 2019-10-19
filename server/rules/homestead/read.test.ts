@@ -14,7 +14,8 @@ import {
 } from '../../test-helpers/firestore-helpers';
 
 const COLLECTION = COLLECTIONS.HOMESTEADS;
-const DOC_ID = generateId();
+const DOC_ID_1 = generateId();
+const DOC_ID_2 = generateId();
 const USER_ID = generateUserId();
 
 describe('/homesteads/read', () => {
@@ -25,8 +26,13 @@ describe('/homesteads/read', () => {
       db = await setup(USER_ID, {
         [membershipPath(
           COLLECTION,
-          DOC_ID,
+          DOC_ID_1,
           USER_ID
+        )]: generateSecurityRecordAny(),
+        [membershipPath(
+          COLLECTION,
+          DOC_ID_2,
+          generateUserId()
         )]: generateSecurityRecordAny(),
       });
     });
@@ -34,6 +40,14 @@ describe('/homesteads/read', () => {
     afterAll(() => teardown());
 
     test('disallow without a membership record', async () => {
+      const collection = db.collection(COLLECTION);
+      const document = collection.doc(DOC_ID_2);
+
+      await firebase.assertFails(collection.get());
+      await firebase.assertFails(document.get());
+    });
+
+    test('disallow on records that don\'t exist', async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(generateId());
 
@@ -43,7 +57,7 @@ describe('/homesteads/read', () => {
 
     test('allow with a membership record', async () => {
       const collection = db.collection(COLLECTION);
-      const document = collection.doc(DOC_ID);
+      const document = collection.doc(DOC_ID_1);
 
       await firebase.assertFails(collection.get());
       await firebase.assertSucceeds(document.get());
@@ -59,7 +73,7 @@ describe('/homesteads/read', () => {
 
     test('disallow', async () => {
       const collection = db.collection(COLLECTION);
-      const document = collection.doc(DOC_ID);
+      const document = collection.doc(DOC_ID_1);
 
       await firebase.assertFails(collection.get());
       await firebase.assertFails(document.get());

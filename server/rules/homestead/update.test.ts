@@ -29,6 +29,7 @@ describe('/homesteads/update', () => {
     beforeAll(async () => {
       db = await setup(USER_ID, {
         [documentPath(COLLECTION, DOC_ID_1)]: generateMockDocument(),
+        [documentPath(COLLECTION, DOC_ID_2)]: generateMockDocument(),
         [membershipPath(
           COLLECTION,
           DOC_ID_1,
@@ -46,6 +47,11 @@ describe('/homesteads/update', () => {
 
     test('disallow without an owner membership role', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_2);
+      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+    });
+
+    test('disallow without an existing record', async () => {
+      const document = db.collection(COLLECTION).doc(generateId());
       await firebase.assertFails(document.update(generateMockUpdateDocument()));
     });
 
