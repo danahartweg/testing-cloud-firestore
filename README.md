@@ -1,4 +1,4 @@
-# Unit Testing Cloud Firestore
+# Testing Cloud Firestore
 Writing Cloud Firestore functions and security rules is relatively well documented and understood. Testing them, however, is not.
 
 This repository is companion code to the [following article](https://medium.com/@danahartweg/testing-guide-for-cloud-firestore-functions-and-security-rules-39d9f3c92d99).
