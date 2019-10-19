@@ -1,0 +1,12 @@
+# dependencies
+node_modules/**/*
+
+# IDE
+settings.json
+
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+
+# Visual Studio Code related
+.vscode/

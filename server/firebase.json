@@ -1,0 +1,16 @@
+{
+  "emulators": {
+    "firestore": {
+      "host": "127.0.0.1"
+    },
+    "functions": {
+      "host": "127.0.0.1"
+    }
+  },
+  "firestore": {
+    "rules": "rules/firestore.rules"
+  },
+  "functions": {
+    "predeploy": ["yarn build:functions"]
+  }
+}

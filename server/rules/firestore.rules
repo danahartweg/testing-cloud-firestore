@@ -1,0 +1,66 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // GENERIC //
+
+    function hasRoleForResource(targetResource, targetRoles) {
+      return targetResource.data.role in targetRoles;
+    }
+
+    // USERS //
+
+  	function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function getUserResource(userId) {
+      return get(/databases/$(database)/documents/users/$(userId));
+    }
+
+    // HOMESTEAD //
+
+    function getHomesteadMemberPath(homesteadId) {
+      return /databases/$(database)/documents/homesteads/$(homesteadId)/members/$(request.auth.uid);
+    }
+
+    function getHomesteadMembershipResource(homesteadId) {
+      return get(getHomesteadMemberPath(homesteadId));
+    }
+
+    function hasHomesteadAccess(homesteadId) {
+      return exists(getHomesteadMemberPath(homesteadId));
+    }
+
+    // ROUTES //
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /homesteads/{homesteadId} {
+      allow read: if hasHomesteadAccess(homesteadId);
+      allow update: if hasRoleForResource(getHomesteadMembershipResource(homesteadId), ['owner']);
+      allow create: if getUserResource(request.auth.uid).data.ownedHomestead == '';
+    }
+
+    match /plantVarieties/{document=**} {
+      allow read: if (resource.data.homesteadId == '' && isAuthenticated()) || hasHomesteadAccess(resource.data.homesteadId);
+      allow create: if hasHomesteadAccess(request.resource.data.homesteadId);
+      allow update: if hasHomesteadAccess(request.resource.data.homesteadId);
+    }
+
+    match /seedSources/{seedSourceId} {
+      allow read: if (resource.data.homesteadId == '' && isAuthenticated()) || hasHomesteadAccess(resource.data.homesteadId);
+      allow create: if (request.resource.data.homesteadId == '' && isAuthenticated()) || hasHomesteadAccess(request.resource.data.homesteadId);
+    }
+
+    match /gardenPlots/{gardenPlotId} {
+      allow read: if hasHomesteadAccess(resource.data.homesteadId);
+      allow create: if hasRoleForResource(getHomesteadMembershipResource(request.resource.data.homesteadId), ['owner']);
+      allow update: if request.resource.data.homesteadId == resource.data.homesteadId && hasRoleForResource(getHomesteadMembershipResource(request.resource.data.homesteadId), ['owner']);
+    }
+
+    match /users/{userId} {
+      allow read, update: if request.auth.uid == userId;
+    }
+  }
+}
