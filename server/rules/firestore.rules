@@ -42,23 +42,6 @@ service cloud.firestore {
       allow create: if getUserResource(request.auth.uid).data.ownedHomestead == '';
     }
 
-    match /plantVarieties/{document=**} {
-      allow read: if (resource.data.homesteadId == '' && isAuthenticated()) || hasHomesteadAccess(resource.data.homesteadId);
-      allow create: if hasHomesteadAccess(request.resource.data.homesteadId);
-      allow update: if hasHomesteadAccess(request.resource.data.homesteadId);
-    }
-
-    match /seedSources/{seedSourceId} {
-      allow read: if (resource.data.homesteadId == '' && isAuthenticated()) || hasHomesteadAccess(resource.data.homesteadId);
-      allow create: if (request.resource.data.homesteadId == '' && isAuthenticated()) || hasHomesteadAccess(request.resource.data.homesteadId);
-    }
-
-    match /gardenPlots/{gardenPlotId} {
-      allow read: if hasHomesteadAccess(resource.data.homesteadId);
-      allow create: if hasRoleForResource(getHomesteadMembershipResource(request.resource.data.homesteadId), ['owner']);
-      allow update: if request.resource.data.homesteadId == resource.data.homesteadId && hasRoleForResource(getHomesteadMembershipResource(request.resource.data.homesteadId), ['owner']);
-    }
-
     match /users/{userId} {
       allow read, update: if request.auth.uid == userId;
     }
