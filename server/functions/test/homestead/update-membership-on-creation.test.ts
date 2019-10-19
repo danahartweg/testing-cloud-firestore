@@ -1,4 +1,4 @@
-import wait from '../../helpers/wait';
+import { waitForCloudFunctionExecution } from '../../helpers/wait';
 import {
   COLLECTIONS,
   documentPath,
@@ -37,7 +37,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
       .collection(COLLECTIONS.HOMESTEADS)
       .add({ name: homesteadName, owner: USER_ID });
 
-    return wait();
+    return waitForCloudFunctionExecution();
   });
 
   afterAll(() => teardown());
