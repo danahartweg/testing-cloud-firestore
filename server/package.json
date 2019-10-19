@@ -1,5 +1,5 @@
 {
-  "name": "unit-testing-cloud-firestore",
+  "name": "testing-cloud-firestore",
   "scripts": {
     "build:functions": "tsc -p ./functions/tsconfig.build.json",
     "deploy:functions": "firebase deploy --only firestore",

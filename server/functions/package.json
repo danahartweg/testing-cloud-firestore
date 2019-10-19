@@ -1,5 +1,5 @@
 {
-  "name": "unit-testing-cloud-firestore-cloud-functions",
+  "name": "testing-cloud-firestore-cloud-functions",
   "engines": {
     "node": "10"
   },
