@@ -2,8 +2,8 @@
   "name": "testing-cloud-firestore",
   "scripts": {
     "build:functions": "tsc -p ./functions/tsconfig.build.json",
-    "deploy:functions": "firebase deploy --only firestore",
-    "deploy:rules": "firebase deploy --only functions",
+    "deploy:functions": "firebase deploy --only functions",
+    "deploy:rules": "firebase deploy --only firestore",
     "lint:functions": "tslint -p ./functions",
     "lint:rules": "tslint -p ./rules",
     "lint": "yarn lint:functions && yarn lint:rules",
