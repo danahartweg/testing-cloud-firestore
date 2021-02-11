@@ -5,13 +5,12 @@ import {
   generateUserId,
 } from '../../../test-helpers/constants';
 import {
-  DocumentReference,
-  Firestore,
   getAdminApp,
   setup,
   setUseRealProjectId,
   teardown,
 } from '../../../test-helpers/firestore-helpers';
+import type { DocumentReference, Firestore } from '../../../test-helpers/types';
 
 const USER_ID = generateUserId();
 

@@ -1,4 +1,4 @@
-import * as firebase from '@firebase/testing';
+import { assertFails } from '@firebase/rules-unit-testing';
 
 import {
   COLLECTIONS,
@@ -7,11 +7,8 @@ import {
   generateUserId,
   membershipPath,
 } from '../../test-helpers/constants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+import { setup, teardown } from '../../test-helpers/firestore-helpers';
+import type { Firestore } from '../../test-helpers/types';
 
 const COLLECTION = COLLECTIONS.HOMESTEADS;
 const DOC_ID = generateId();
@@ -35,7 +32,7 @@ describe('/homesteads/delete', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      await assertFails(document.delete());
     });
   });
 
@@ -48,7 +45,7 @@ describe('/homesteads/delete', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      await assertFails(document.delete());
     });
   });
 });

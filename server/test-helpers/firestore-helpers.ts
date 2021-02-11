@@ -1,7 +1,10 @@
-import * as firebase from '@firebase/testing';
+import {
+  apps,
+  initializeAdminApp,
+  initializeTestApp,
+} from '@firebase/rules-unit-testing';
 
-export type Firestore = firebase.firestore.Firestore;
-export type DocumentReference = firebase.firestore.DocumentReference;
+import type { Firestore } from './types';
 
 let testIncrement = 0;
 let useRealProjectId = false;
@@ -24,20 +27,20 @@ export function setUseRealProjectId() {
 }
 
 export function getAdminApp(): Firestore {
-  const adminApp = firebase.initializeAdminApp({
+  const adminApp = initializeAdminApp({
     projectId: generateProjectId(),
   });
 
-  return (adminApp.firestore() as any) as Firestore;
+  return adminApp.firestore();
 }
 
 export function getAuthedApp(userUid?: string): Firestore {
-  const app = firebase.initializeTestApp({
+  const app = initializeTestApp({
     auth: userUid ? { uid: userUid } : undefined,
     projectId: generateProjectId(),
   });
 
-  return (app.firestore() as any) as Firestore;
+  return app.firestore();
 }
 
 export async function setup(
@@ -64,5 +67,5 @@ export async function setup(
 
 export async function teardown() {
   useRealProjectId = false;
-  return Promise.all(firebase.apps().map(app => app.delete()));
+  return Promise.all(apps().map((app) => app.delete()));
 }

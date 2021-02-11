@@ -18,7 +18,7 @@
     "validate": "yarn validate:functions && yarn validate:rules"
   },
   "dependencies": {
-    "@firebase/testing": "^0.13.0",
+    "@firebase/rules-unit-testing": "^1.1.0",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

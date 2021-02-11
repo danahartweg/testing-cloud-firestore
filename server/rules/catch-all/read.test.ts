@@ -1,15 +1,12 @@
-import * as firebase from '@firebase/testing';
+import { assertFails } from '@firebase/rules-unit-testing';
 
 import {
   COLLECTIONS,
   generateId,
   generateUserId,
 } from '../../test-helpers/constants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+import { setup, teardown } from '../../test-helpers/firestore-helpers';
+import type { Firestore } from '../../test-helpers/types';
 
 const COLLECTION = COLLECTIONS.CATCH_ALL;
 const DOC_ID = generateId();
@@ -29,8 +26,8 @@ describe('/catchAlls/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
   });
 
@@ -45,8 +42,8 @@ describe('/catchAlls/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
   });
 });

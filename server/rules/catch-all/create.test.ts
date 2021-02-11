@@ -1,4 +1,4 @@
-import * as firebase from '@firebase/testing';
+import { assertFails } from '@firebase/rules-unit-testing';
 
 import {
   COLLECTIONS,
@@ -6,11 +6,8 @@ import {
   generateId,
   generateUserId,
 } from '../../test-helpers/constants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+import { setup, teardown } from '../../test-helpers/firestore-helpers';
+import type { Firestore } from '../../test-helpers/types';
 
 const COLLECTION = COLLECTIONS.CATCH_ALL;
 const DOC_ID = generateId();
@@ -28,7 +25,7 @@ describe('/catchAlls/create', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockDocument()));
+      await assertFails(document.set(generateMockDocument()));
     });
   });
 
@@ -41,7 +38,7 @@ describe('/catchAlls/create', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockDocument()));
+      await assertFails(document.set(generateMockDocument()));
     });
   });
 });

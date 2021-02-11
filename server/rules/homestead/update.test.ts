@@ -1,4 +1,4 @@
-import * as firebase from '@firebase/testing';
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 
 import {
   COLLECTIONS,
@@ -11,11 +11,8 @@ import {
   generateUserId,
   membershipPath,
 } from '../../test-helpers/constants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+import { setup, teardown } from '../../test-helpers/firestore-helpers';
+import type { Firestore } from '../../test-helpers/types';
 
 const COLLECTION = COLLECTIONS.HOMESTEADS;
 const DOC_ID_1 = generateId();
@@ -47,24 +44,22 @@ describe('/homesteads/update', () => {
 
     test('disallow without an owner membership role', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_2);
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
 
     test('disallow without an existing record', async () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
 
     test('disallow without a membership record', async () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
 
     test('allow with an owner membership role', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await firebase.assertSucceeds(
-        document.update(generateMockUpdateDocument())
-      );
+      await assertSucceeds(document.update(generateMockUpdateDocument()));
     });
   });
 
@@ -77,7 +72,7 @@ describe('/homesteads/update', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
   });
 });

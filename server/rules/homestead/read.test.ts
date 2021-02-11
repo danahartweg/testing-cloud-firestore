@@ -1,4 +1,4 @@
-import * as firebase from '@firebase/testing';
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 
 import {
   COLLECTIONS,
@@ -7,11 +7,8 @@ import {
   generateUserId,
   membershipPath,
 } from '../../test-helpers/constants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+import { setup, teardown } from '../../test-helpers/firestore-helpers';
+import type { Firestore } from '../../test-helpers/types';
 
 const COLLECTION = COLLECTIONS.HOMESTEADS;
 const DOC_ID_1 = generateId();
@@ -43,24 +40,24 @@ describe('/homesteads/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_2);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
 
-    test('disallow on records that don\'t exist', async () => {
+    test("disallow on records that don't exist", async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(generateId());
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
 
     test('allow with a membership record', async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_1);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertSucceeds(document.get());
+      await assertFails(collection.get());
+      await assertSucceeds(document.get());
     });
   });
 
@@ -75,8 +72,8 @@ describe('/homesteads/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_1);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
   });
 });
