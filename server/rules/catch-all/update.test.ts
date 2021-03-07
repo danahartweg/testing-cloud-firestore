@@ -5,7 +5,7 @@ import {
   generateId,
   generateUserId,
   generateMockUpdateDocument,
-} from '../../test-helpers/contants';
+} from '../../test-helpers/constants';
 import {
   Firestore,
   setup,

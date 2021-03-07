@@ -3,7 +3,7 @@ import {
   COLLECTIONS,
   documentPath,
   generateUserId,
-} from '../../../test-helpers/contants';
+} from '../../../test-helpers/constants';
 import {
   DocumentReference,
   Firestore,
