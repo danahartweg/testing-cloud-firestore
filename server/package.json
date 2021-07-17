@@ -17,6 +17,7 @@
     "uuid": "^8.3.0"
   },
   "devDependencies": {
+    "@firebase/rules-unit-testing": "^1.3.0",
     "@typescript-eslint/eslint-plugin": "^3.9.0",
     "@typescript-eslint/parser": "^3.8.0",
     "@types/jest": "^26.0.0",
@@ -25,6 +26,7 @@
     "eslint-import-resolver-typescript": "^2.4.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint": "^7.29.0",
+    "firebase-admin": "^9.10.0",
     "jest": "^27.0.0",
     "ts-jest": "^27.0.0",
     "typescript": "4.0.8"
