@@ -1,3 +1,4 @@
+import { assertFails } from '@firebase/rules-unit-testing';
 import { Firestore } from '@test-helpers/types';
 
 import {
@@ -19,11 +20,8 @@ describe('/homesteads/delete', () => {
   describe('authenticated', () => {
     beforeAll(async () => {
       db = await setup(USER_ID, {
-        [membershipPath(
-          COLLECTION,
-          DOC_ID,
-          USER_ID
-        )]: generateSecurityRecordOwner(),
+        [membershipPath(COLLECTION, DOC_ID, USER_ID)]:
+          generateSecurityRecordOwner(),
       });
     });
 
@@ -31,7 +29,7 @@ describe('/homesteads/delete', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      await assertFails(document.delete());
     });
   });
 
@@ -44,7 +42,7 @@ describe('/homesteads/delete', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      await assertFails(document.delete());
     });
   });
 });

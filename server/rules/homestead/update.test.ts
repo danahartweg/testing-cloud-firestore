@@ -1,3 +1,4 @@
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 import { Firestore } from '@test-helpers/types';
 
 import {
@@ -26,16 +27,10 @@ describe('/homesteads/update', () => {
       db = await setup(USER_ID, {
         [documentPath(COLLECTION, DOC_ID_1)]: generateMockDocument(),
         [documentPath(COLLECTION, DOC_ID_2)]: generateMockDocument(),
-        [membershipPath(
-          COLLECTION,
-          DOC_ID_1,
-          USER_ID
-        )]: generateSecurityRecordOwner(),
-        [membershipPath(
-          COLLECTION,
-          DOC_ID_2,
-          USER_ID
-        )]: generateSecurityRecordAny(),
+        [membershipPath(COLLECTION, DOC_ID_1, USER_ID)]:
+          generateSecurityRecordOwner(),
+        [membershipPath(COLLECTION, DOC_ID_2, USER_ID)]:
+          generateSecurityRecordAny(),
       });
     });
 
@@ -43,24 +38,22 @@ describe('/homesteads/update', () => {
 
     test('disallow without an owner membership role', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_2);
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
 
     test('disallow without an existing record', async () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
 
     test('disallow without a membership record', async () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
 
     test('allow with an owner membership role', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await firebase.assertSucceeds(
-        document.update(generateMockUpdateDocument())
-      );
+      await assertSucceeds(document.update(generateMockUpdateDocument()));
     });
   });
 
@@ -73,7 +66,7 @@ describe('/homesteads/update', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      await assertFails(document.update(generateMockUpdateDocument()));
     });
   });
 });

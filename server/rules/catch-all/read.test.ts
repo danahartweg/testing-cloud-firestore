@@ -1,3 +1,4 @@
+import { assertFails } from '@firebase/rules-unit-testing';
 import { Firestore } from '@test-helpers/types';
 
 import {
@@ -25,8 +26,8 @@ describe('/catchAlls/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
   });
 
@@ -41,8 +42,8 @@ describe('/catchAlls/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
   });
 });

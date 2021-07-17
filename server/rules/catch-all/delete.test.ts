@@ -1,3 +1,4 @@
+import { assertFails } from '@firebase/rules-unit-testing';
 import { Firestore } from '@test-helpers/types';
 
 import {
@@ -23,7 +24,7 @@ describe('/catchAlls/delete', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      await assertFails(document.delete());
     });
   });
 
@@ -36,7 +37,7 @@ describe('/catchAlls/delete', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      await assertFails(document.delete());
     });
   });
 });

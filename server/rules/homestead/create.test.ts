@@ -1,4 +1,4 @@
-import * as firebase from '@firebase/testing';
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 import { Firestore } from '@test-helpers/types';
 
 import {
@@ -39,7 +39,7 @@ describe('/homesteads/create', () => {
         .update({ ownedHomestead: generateId() });
 
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockUpdateDocument()));
+      await assertFails(document.set(generateMockUpdateDocument()));
     });
 
     test('allow if a homestead has not already been created', async () => {
@@ -50,7 +50,7 @@ describe('/homesteads/create', () => {
         .update({ ownedHomestead: '' });
 
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertSucceeds(document.set(generateMockUpdateDocument()));
+      await assertSucceeds(document.set(generateMockUpdateDocument()));
     });
   });
 
@@ -63,7 +63,7 @@ describe('/homesteads/create', () => {
 
     test('disallow', async () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockUpdateDocument()));
+      await assertFails(document.set(generateMockUpdateDocument()));
     });
   });
 });

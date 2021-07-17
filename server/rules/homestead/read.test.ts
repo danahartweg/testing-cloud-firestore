@@ -1,3 +1,4 @@
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
 import { Firestore } from '@test-helpers/types';
 
 import {
@@ -20,16 +21,10 @@ describe('/homesteads/read', () => {
   describe('authenticated', () => {
     beforeAll(async () => {
       db = await setup(USER_ID, {
-        [membershipPath(
-          COLLECTION,
-          DOC_ID_1,
-          USER_ID
-        )]: generateSecurityRecordAny(),
-        [membershipPath(
-          COLLECTION,
-          DOC_ID_2,
-          generateUserId()
-        )]: generateSecurityRecordAny(),
+        [membershipPath(COLLECTION, DOC_ID_1, USER_ID)]:
+          generateSecurityRecordAny(),
+        [membershipPath(COLLECTION, DOC_ID_2, generateUserId())]:
+          generateSecurityRecordAny(),
       });
     });
 
@@ -39,24 +34,24 @@ describe('/homesteads/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_2);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
 
-    test('disallow on records that don\'t exist', async () => {
+    test(`disallow on records that don't exist`, async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(generateId());
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
 
     test('allow with a membership record', async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_1);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertSucceeds(document.get());
+      await assertFails(collection.get());
+      await assertSucceeds(document.get());
     });
   });
 
@@ -71,8 +66,8 @@ describe('/homesteads/read', () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_1);
 
-      await firebase.assertFails(collection.get());
-      await firebase.assertFails(document.get());
+      await assertFails(collection.get());
+      await assertFails(document.get());
     });
   });
 });
