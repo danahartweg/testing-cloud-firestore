@@ -7,7 +7,7 @@ import {
   generateMockUpdateDocument,
   generateId,
   generateUserId,
-} from '../../test-helpers/contants';
+} from '../../test-helpers/constants';
 import {
   Firestore,
   getAdminApp,

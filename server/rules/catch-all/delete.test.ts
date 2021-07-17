@@ -4,7 +4,7 @@ import {
   COLLECTIONS,
   generateId,
   generateUserId,
-} from '../../test-helpers/contants';
+} from '../../test-helpers/constants';
 import {
   Firestore,
   setup,
