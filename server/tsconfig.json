@@ -1,10 +1,19 @@
 {
   "compilerOptions": {
+    "baseUrl": "./",
     "module": "commonjs",
     "noImplicitReturns": true,
     "noUnusedLocals": true,
+    "paths": {
+      "@helpers/*": ["helpers/*"],
+      "@test-helpers/*": ["test-helpers/*"]
+    },
+    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "es2017"
-  }
+  },
+  "compileOnSave": true,
+  "typeRoots": ["./node_modules/@types", "./typings"],
+  "exclude": ["build"]
 }
