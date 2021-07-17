@@ -2,12 +2,7 @@ import { waitForCloudFunctionExecution } from '@helpers/wait';
 import { AdminFirestore, DocumentReference } from '@test-helpers/types';
 import { Collections } from '@test-helpers/constants';
 import { documentPath, generateUserId } from '@test-helpers/documents';
-import {
-  getAdminApp,
-  setup,
-  setUseRealProjectId,
-  teardown,
-} from '@test-helpers/firestore';
+import { getAdminApp, setup, teardown } from '@test-helpers/firestore';
 
 const USER_ID = generateUserId();
 
@@ -19,8 +14,6 @@ describe('updateMembershipOnHomesteadCreation', () => {
   let homesteadRef: DocumentReference;
 
   beforeAll(async () => {
-    setUseRealProjectId();
-
     await setup(USER_ID, {
       [documentPath(Collections.Users, USER_ID)]: {
         displayName: userName,

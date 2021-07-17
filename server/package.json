@@ -1,16 +1,16 @@
 {
   "name": "testing-cloud-firestore",
   "scripts": {
-    "build:functions": "tsc -p ./functions/tsconfig.build.json",
+    "build:functions": "tsc -p functions/tsconfig.json",
     "deploy:functions": "firebase deploy --only functions",
     "deploy:rules": "firebase deploy --only firestore",
     "lint": "eslint --ext .js,.ts .",
     "postinstall": "yarn --cwd './functions' install --ignore-engines",
-    "execute-tests:functions": "jest './functions'",
-    "execute-tests:rules": "jest './rules'",
+    "execute-tests:functions": "FIREBASE_PROJECT_ID=demo-test-functions jest --testPathPattern=functions/ --runInBand",
+    "execute-tests:rules": "FIREBASE_PROJECT_ID=demo-test-rules jest --testPathPattern=rules/ --runInBand",
     "test": "yarn test:rules && yarn test:functions",
-    "test:functions": "yarn build:functions && firebase emulators:exec --only firestore,functions 'yarn execute-tests:functions'",
-    "test:rules": "firebase emulators:exec --only firestore 'yarn execute-tests:rules'",
+    "test:functions": "yarn build:functions && firebase --project demo-test-functions emulators:exec --only auth,firestore,functions 'yarn execute-tests:functions'",
+    "test:rules": "firebase --project demo-test-rules emulators:exec --only firestore 'yarn execute-tests:rules'",
     "validate": "tsc --noEmit"
   },
   "dependencies": {

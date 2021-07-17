@@ -4,31 +4,16 @@ import {
   initializeTestApp,
 } from '@firebase/rules-unit-testing';
 import { apps as adminApps } from 'firebase-admin';
+
 import { Firestore } from './types';
 
-let testIncrement = 0;
-let useRealProjectId = false;
-const projectIdBase = `firestore-emulator-${Date.now()}`;
-
-function adjustTestIncrement() {
-  testIncrement += 1;
-}
-
-function getProjectId() {
-  return `${projectIdBase}:${testIncrement}`;
-}
-
-function generateProjectId(): string {
-  return useRealProjectId ? 'your-project-name' : getProjectId();
-}
-
-export function setUseRealProjectId() {
-  useRealProjectId = true;
+function getProjectId(): string {
+  return <string>process.env.FIREBASE_PROJECT_ID ?? '';
 }
 
 export function getAdminApp(): ReturnType<typeof initializeAdminApp> {
   const adminApp = initializeAdminApp({
-    projectId: generateProjectId(),
+    projectId: getProjectId(),
   });
 
   return adminApp;
@@ -37,17 +22,16 @@ export function getAdminApp(): ReturnType<typeof initializeAdminApp> {
 export function getAuthedApp(userUid?: string): Firestore {
   const app = initializeTestApp({
     auth: userUid ? { uid: userUid } : undefined,
-    projectId: generateProjectId(),
+    projectId: getProjectId(),
   });
 
-  return app.firestore() as any as Firestore;
+  return app.firestore();
 }
 
 export async function setup(
   userUid?: string,
-  data: any = {}
+  data: Record<string, unknown> = {}
 ): Promise<Firestore> {
-  adjustTestIncrement();
   const db = getAuthedApp(userUid);
 
   if (!data || !Object.keys(data).length) {
@@ -58,15 +42,14 @@ export async function setup(
   const batch = adminDb.batch();
 
   Object.entries(data).forEach(([key, value]) => {
-    batch.set(adminDb.doc(key), value as any);
+    batch.set(adminDb.doc(key), value as unknown);
   });
 
   await batch.commit();
   return db;
 }
 
-export async function teardown() {
-  useRealProjectId = false;
+export async function teardown(): Promise<unknown> {
   const appsToClean = [...apps(), ...adminApps];
   return Promise.all(appsToClean.map((app) => app?.delete()));
 }
