@@ -6,9 +6,8 @@ import {
   generateUserId,
   membershipPath,
 } from '@test-helpers/documents';
+import { setup, teardown } from '@test-helpers/firestore';
 import { Firestore } from '@test-helpers/types';
-
-import { setup, teardown } from '../../test-helpers/firestore-helpers';
 
 const COLLECTION = Collections.Homesteads;
 const DOC_ID_1 = generateId();

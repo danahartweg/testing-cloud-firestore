@@ -5,9 +5,8 @@ import {
   generateMockDocument,
   generateUserId,
 } from '@test-helpers/documents';
+import { setup, teardown } from '@test-helpers/firestore';
 import { Firestore } from '@test-helpers/types';
-
-import { setup, teardown } from '../../test-helpers/firestore-helpers';
 
 const COLLECTION = Collections.CatchAll;
 const DOC_ID = generateId();
