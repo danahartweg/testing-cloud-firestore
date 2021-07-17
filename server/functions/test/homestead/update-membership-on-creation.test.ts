@@ -1,3 +1,4 @@
+import { waitForCloudFunctionExecution } from '@helpers/wait';
 import { AdminFirestore, DocumentReference } from '@test-helpers/types';
 import { Collections } from '@test-helpers/constants';
 import { documentPath, generateUserId } from '@test-helpers/documents';
@@ -7,8 +8,6 @@ import {
   setUseRealProjectId,
   teardown,
 } from '@test-helpers/firestore';
-
-import { waitForCloudFunctionExecution } from '../../helpers/wait';
 
 const USER_ID = generateUserId();
 
