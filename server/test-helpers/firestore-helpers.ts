@@ -1,7 +1,10 @@
-import * as firebase from '@firebase/testing';
-
-export type Firestore = firebase.firestore.Firestore;
-export type DocumentReference = firebase.firestore.DocumentReference;
+import {
+  apps,
+  initializeAdminApp,
+  initializeTestApp,
+} from '@firebase/rules-unit-testing';
+import { apps as adminApps } from 'firebase-admin';
+import { Firestore } from './types';
 
 let testIncrement = 0;
 let useRealProjectId = false;
@@ -23,21 +26,21 @@ export function setUseRealProjectId() {
   useRealProjectId = true;
 }
 
-export function getAdminApp(): Firestore {
-  const adminApp = firebase.initializeAdminApp({
+export function getAdminApp(): ReturnType<typeof initializeAdminApp> {
+  const adminApp = initializeAdminApp({
     projectId: generateProjectId(),
   });
 
-  return (adminApp.firestore() as any) as Firestore;
+  return adminApp;
 }
 
 export function getAuthedApp(userUid?: string): Firestore {
-  const app = firebase.initializeTestApp({
+  const app = initializeTestApp({
     auth: userUid ? { uid: userUid } : undefined,
     projectId: generateProjectId(),
   });
 
-  return (app.firestore() as any) as Firestore;
+  return app.firestore() as any as Firestore;
 }
 
 export async function setup(
@@ -51,7 +54,7 @@ export async function setup(
     return db;
   }
 
-  const adminDb = getAdminApp();
+  const adminDb = getAdminApp().firestore();
   const batch = adminDb.batch();
 
   Object.entries(data).forEach(([key, value]) => {
@@ -64,5 +67,6 @@ export async function setup(
 
 export async function teardown() {
   useRealProjectId = false;
-  return Promise.all(firebase.apps().map(app => app.delete()));
+  const appsToClean = [...apps(), ...adminApps];
+  return Promise.all(appsToClean.map((app) => app?.delete()));
 }

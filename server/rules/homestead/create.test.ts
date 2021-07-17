@@ -1,4 +1,5 @@
 import * as firebase from '@firebase/testing';
+import { Firestore } from '@test-helpers/types';
 
 import {
   COLLECTIONS,
@@ -9,7 +10,6 @@ import {
   generateUserId,
 } from '../../test-helpers/constants';
 import {
-  Firestore,
   getAdminApp,
   setup,
   teardown,
@@ -32,7 +32,7 @@ describe('/homesteads/create', () => {
     afterAll(() => teardown());
 
     test('disallow if a homestead has already been created', async () => {
-      const adminDb = getAdminApp();
+      const adminDb = getAdminApp().firestore();
       await adminDb
         .collection(COLLECTIONS.USERS)
         .doc(USER_ID)
@@ -43,7 +43,7 @@ describe('/homesteads/create', () => {
     });
 
     test('allow if a homestead has not already been created', async () => {
-      const adminDb = getAdminApp();
+      const adminDb = getAdminApp().firestore();
       await adminDb
         .collection(COLLECTIONS.USERS)
         .doc(USER_ID)

@@ -1,4 +1,4 @@
-import * as firebase from '@firebase/testing';
+import { Firestore } from '@test-helpers/types';
 
 import {
   COLLECTIONS,
@@ -11,11 +11,7 @@ import {
   generateUserId,
   membershipPath,
 } from '../../test-helpers/constants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+import { setup, teardown } from '../../test-helpers/firestore-helpers';
 
 const COLLECTION = COLLECTIONS.HOMESTEADS;
 const DOC_ID_1 = generateId();

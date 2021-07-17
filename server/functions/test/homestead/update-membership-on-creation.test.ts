@@ -1,3 +1,5 @@
+import { AdminFirestore, DocumentReference } from '@test-helpers/types';
+
 import { waitForCloudFunctionExecution } from '../../helpers/wait';
 import {
   COLLECTIONS,
@@ -5,8 +7,6 @@ import {
   generateUserId,
 } from '../../../test-helpers/constants';
 import {
-  DocumentReference,
-  Firestore,
   getAdminApp,
   setup,
   setUseRealProjectId,
@@ -19,7 +19,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
   const homesteadName = 'Test Homestead';
   const userName = 'Test User';
 
-  let db: Firestore;
+  let db: AdminFirestore;
   let homesteadRef: DocumentReference;
 
   beforeAll(async () => {
@@ -31,7 +31,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
       },
     });
 
-    db = getAdminApp();
+    db = getAdminApp().firestore();
 
     homesteadRef = await db
       .collection(COLLECTIONS.HOMESTEADS)
