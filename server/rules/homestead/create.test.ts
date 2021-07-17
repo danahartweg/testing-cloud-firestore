@@ -1,21 +1,21 @@
 import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
-import { Firestore } from '@test-helpers/types';
-
+import { Collections } from '@test-helpers/constants';
 import {
-  COLLECTIONS,
   documentPath,
+  generateId,
   generateMockDocument,
   generateMockUpdateDocument,
-  generateId,
   generateUserId,
-} from '../../test-helpers/constants';
+} from '@test-helpers/documents';
+import { Firestore } from '@test-helpers/types';
+
 import {
   getAdminApp,
   setup,
   teardown,
 } from '../../test-helpers/firestore-helpers';
 
-const COLLECTION = COLLECTIONS.HOMESTEADS;
+const COLLECTION = Collections.Homesteads;
 const DOC_ID = generateId();
 const USER_ID = generateUserId();
 
@@ -25,7 +25,7 @@ describe('/homesteads/create', () => {
   describe('authenticated', () => {
     beforeAll(async () => {
       db = await setup(USER_ID, {
-        [documentPath(COLLECTIONS.USERS, USER_ID)]: generateMockDocument(),
+        [documentPath(Collections.Users, USER_ID)]: generateMockDocument(),
       });
     });
 
@@ -34,7 +34,7 @@ describe('/homesteads/create', () => {
     test('disallow if a homestead has already been created', async () => {
       const adminDb = getAdminApp().firestore();
       await adminDb
-        .collection(COLLECTIONS.USERS)
+        .collection(Collections.Users)
         .doc(USER_ID)
         .update({ ownedHomestead: generateId() });
 
@@ -45,7 +45,7 @@ describe('/homesteads/create', () => {
     test('allow if a homestead has not already been created', async () => {
       const adminDb = getAdminApp().firestore();
       await adminDb
-        .collection(COLLECTIONS.USERS)
+        .collection(Collections.Users)
         .doc(USER_ID)
         .update({ ownedHomestead: '' });
 

@@ -1,16 +1,16 @@
 import { assertFails } from '@firebase/rules-unit-testing';
+import { Collections } from '@test-helpers/constants';
+import {
+  generateId,
+  generateUserId,
+  generateSecurityRecordOwner,
+  membershipPath,
+} from '@test-helpers/documents';
 import { Firestore } from '@test-helpers/types';
 
-import {
-  COLLECTIONS,
-  generateId,
-  generateSecurityRecordOwner,
-  generateUserId,
-  membershipPath,
-} from '../../test-helpers/constants';
 import { setup, teardown } from '../../test-helpers/firestore-helpers';
 
-const COLLECTION = COLLECTIONS.HOMESTEADS;
+const COLLECTION = Collections.Homesteads;
 const DOC_ID = generateId();
 const USER_ID = generateUserId();
 

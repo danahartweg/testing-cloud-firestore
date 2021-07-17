@@ -1,11 +1,8 @@
 import { AdminFirestore, DocumentReference } from '@test-helpers/types';
+import { Collections } from '@test-helpers/constants';
+import { documentPath, generateUserId } from '@test-helpers/documents';
 
 import { waitForCloudFunctionExecution } from '../../helpers/wait';
-import {
-  COLLECTIONS,
-  documentPath,
-  generateUserId,
-} from '../../../test-helpers/constants';
 import {
   getAdminApp,
   setup,
@@ -26,7 +23,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
     setUseRealProjectId();
 
     await setup(USER_ID, {
-      [documentPath(COLLECTIONS.USERS, USER_ID)]: {
+      [documentPath(Collections.Users, USER_ID)]: {
         displayName: userName,
       },
     });
@@ -34,7 +31,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
     db = getAdminApp().firestore();
 
     homesteadRef = await db
-      .collection(COLLECTIONS.HOMESTEADS)
+      .collection(Collections.Homesteads)
       .add({ name: homesteadName, owner: USER_ID });
 
     return waitForCloudFunctionExecution();
@@ -44,7 +41,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
 
   test('updates the user with the homestead name', async () => {
     const userDocument = await db
-      .collection(COLLECTIONS.USERS)
+      .collection(Collections.Users)
       .doc(USER_ID)
       .get();
 
@@ -54,7 +51,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
 
   test('sets the current user as the homestead owner', async () => {
     const membershipRecord = await db
-      .collection(COLLECTIONS.HOMESTEADS)
+      .collection(Collections.Homesteads)
       .doc(homesteadRef.id)
       .collection('members')
       .doc(USER_ID)

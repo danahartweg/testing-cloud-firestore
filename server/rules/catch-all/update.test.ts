@@ -1,15 +1,15 @@
 import { assertFails } from '@firebase/rules-unit-testing';
+import { Collections } from '@test-helpers/constants';
+import {
+  generateId,
+  generateMockUpdateDocument,
+  generateUserId,
+} from '@test-helpers/documents';
 import { Firestore } from '@test-helpers/types';
 
-import {
-  COLLECTIONS,
-  generateId,
-  generateUserId,
-  generateMockUpdateDocument,
-} from '../../test-helpers/constants';
 import { setup, teardown } from '../../test-helpers/firestore-helpers';
 
-const COLLECTION = COLLECTIONS.CATCH_ALL;
+const COLLECTION = Collections.CatchAll;
 const DOC_ID = generateId();
 const USER_ID = generateUserId();
 
