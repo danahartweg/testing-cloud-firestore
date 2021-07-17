@@ -20,14 +20,14 @@ describe('/catchAlls/read', () => {
       db = await setup(USER_ID);
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
     test('disallow', async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID);
 
       await assertFails(collection.get());
-      await assertFails(document.get());
+      return assertFails(document.get());
     });
   });
 
@@ -36,14 +36,14 @@ describe('/catchAlls/read', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
     test('disallow', async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID);
 
       await assertFails(collection.get());
-      await assertFails(document.get());
+      return assertFails(document.get());
     });
   });
 });

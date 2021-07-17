@@ -40,7 +40,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
     return waitForCloudFunctionExecution();
   });
 
-  afterAll(() => teardown());
+  afterAll(teardown);
 
   test('updates the user with the homestead name', async () => {
     const userDocument = await db

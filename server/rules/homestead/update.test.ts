@@ -34,26 +34,26 @@ describe('/homesteads/update', () => {
       });
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow without an owner membership role', async () => {
+    test('disallow without an owner membership role', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_2);
-      await assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
 
-    test('disallow without an existing record', async () => {
+    test('disallow without an existing record', () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
 
-    test('disallow without a membership record', async () => {
+    test('disallow without a membership record', () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
 
-    test('allow with an owner membership role', async () => {
+    test('allow with an owner membership role', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await assertSucceeds(document.update(generateMockUpdateDocument()));
+      return assertSucceeds(document.update(generateMockUpdateDocument()));
     });
   });
 
@@ -62,11 +62,11 @@ describe('/homesteads/update', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
   });
 });

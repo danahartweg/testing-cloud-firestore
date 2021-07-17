@@ -28,14 +28,14 @@ describe('/homesteads/read', () => {
       });
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
     test('disallow without a membership record', async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_2);
 
       await assertFails(collection.get());
-      await assertFails(document.get());
+      return assertFails(document.get());
     });
 
     test(`disallow on records that don't exist`, async () => {
@@ -43,7 +43,7 @@ describe('/homesteads/read', () => {
       const document = collection.doc(generateId());
 
       await assertFails(collection.get());
-      await assertFails(document.get());
+      return assertFails(document.get());
     });
 
     test('allow with a membership record', async () => {
@@ -51,7 +51,7 @@ describe('/homesteads/read', () => {
       const document = collection.doc(DOC_ID_1);
 
       await assertFails(collection.get());
-      await assertSucceeds(document.get());
+      return assertSucceeds(document.get());
     });
   });
 
@@ -60,14 +60,14 @@ describe('/homesteads/read', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
     test('disallow', async () => {
       const collection = db.collection(COLLECTION);
       const document = collection.doc(DOC_ID_1);
 
       await assertFails(collection.get());
-      await assertFails(document.get());
+      return assertFails(document.get());
     });
   });
 });

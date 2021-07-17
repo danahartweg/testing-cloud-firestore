@@ -21,11 +21,11 @@ describe('/catchAlls/update', () => {
       db = await setup(USER_ID);
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
   });
 
@@ -34,11 +34,11 @@ describe('/catchAlls/update', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
   });
 });

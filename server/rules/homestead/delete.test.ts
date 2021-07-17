@@ -25,11 +25,11 @@ describe('/homesteads/delete', () => {
       });
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.delete());
+      return assertFails(document.delete());
     });
   });
 
@@ -38,11 +38,11 @@ describe('/homesteads/delete', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.delete());
+      return assertFails(document.delete());
     });
   });
 });

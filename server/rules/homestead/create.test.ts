@@ -29,7 +29,7 @@ describe('/homesteads/create', () => {
       });
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
     test('disallow if a homestead has already been created', async () => {
       const adminDb = getAdminApp().firestore();
@@ -39,7 +39,7 @@ describe('/homesteads/create', () => {
         .update({ ownedHomestead: generateId() });
 
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.set(generateMockUpdateDocument()));
+      return assertFails(document.set(generateMockUpdateDocument()));
     });
 
     test('allow if a homestead has not already been created', async () => {
@@ -50,7 +50,7 @@ describe('/homesteads/create', () => {
         .update({ ownedHomestead: '' });
 
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertSucceeds(document.set(generateMockUpdateDocument()));
+      return assertSucceeds(document.set(generateMockUpdateDocument()));
     });
   });
 
@@ -59,11 +59,11 @@ describe('/homesteads/create', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.set(generateMockUpdateDocument()));
+      return assertFails(document.set(generateMockUpdateDocument()));
     });
   });
 });

@@ -20,11 +20,11 @@ describe('/catchAlls/delete', () => {
       db = await setup(USER_ID);
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.delete());
+      return assertFails(document.delete());
     });
   });
 
@@ -33,11 +33,11 @@ describe('/catchAlls/delete', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await assertFails(document.delete());
+      return assertFails(document.delete());
     });
   });
 });
