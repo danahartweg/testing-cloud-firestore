@@ -1,7 +1,9 @@
 import {
   apps,
+  clearFirestoreData,
   initializeAdminApp,
   initializeTestApp,
+  withFunctionTriggersDisabled,
 } from '@firebase/rules-unit-testing';
 import { apps as adminApps } from 'firebase-admin';
 
@@ -9,6 +11,13 @@ import { Firestore } from './types';
 
 function getProjectId(): string {
   return <string>process.env.FIREBASE_PROJECT_ID ?? '';
+}
+
+async function potentiallyWrapOperation(
+  operation: () => Promise<unknown>
+): Promise<unknown> {
+  if (getProjectId() === 'demo-test-rules') return operation();
+  return withFunctionTriggersDisabled(() => operation());
 }
 
 export function getAdminApp(): ReturnType<typeof initializeAdminApp> {
@@ -45,11 +54,15 @@ export async function setup(
     batch.set(adminDb.doc(key), value as unknown);
   });
 
-  await batch.commit();
+  await potentiallyWrapOperation(() => batch.commit());
   return db;
 }
 
 export async function teardown(): Promise<unknown> {
+  await potentiallyWrapOperation(() =>
+    clearFirestoreData({ projectId: getProjectId() })
+  );
+
   const appsToClean = [...apps(), ...adminApps];
   return Promise.all(appsToClean.map((app) => app?.delete()));
 }
