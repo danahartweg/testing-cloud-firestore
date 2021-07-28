@@ -1,18 +1,14 @@
-import * as firebase from '@firebase/testing';
-
+import { assertFails } from '@firebase/rules-unit-testing';
+import { Collections } from '@test-helpers/constants';
 import {
-  COLLECTIONS,
-  generateMockDocument,
   generateId,
+  generateMockDocument,
   generateUserId,
-} from '../../test-helpers/contants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+} from '@test-helpers/documents';
+import { setup, teardown } from '@test-helpers/firestore';
+import { Firestore } from '@test-helpers/types';
 
-const COLLECTION = COLLECTIONS.CATCH_ALL;
+const COLLECTION = Collections.CatchAll;
 const DOC_ID = generateId();
 const USER_ID = generateUserId();
 
@@ -24,11 +20,11 @@ describe('/catchAlls/create', () => {
       db = await setup(USER_ID);
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockDocument()));
+      return assertFails(document.set(generateMockDocument()));
     });
   });
 
@@ -37,11 +33,11 @@ describe('/catchAlls/create', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockDocument()));
+      return assertFails(document.set(generateMockDocument()));
     });
   });
 });

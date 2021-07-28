@@ -1,11 +1,11 @@
 # Testing Cloud Firestore
 Writing Cloud Firestore functions and security rules is relatively well documented and understood. Testing them, however, is not.
 
-This repository is companion code to the [following article](https://medium.com/@danahartweg/testing-guide-for-cloud-firestore-functions-and-security-rules-39d9f3c92d99).
+This repository was initially created as a companion to [this article](https://medium.com/@danahartweg/testing-guide-for-cloud-firestore-functions-and-security-rules-39d9f3c92d99) and has since [been updated](https://medium.com/geekculture/updated-cloud-firestore-testing-guide-ce146f2b312) with the latest Cloud Firestore has to offer.
 
 ## Quick setup
 ```bash
-yarn global add firebase-tools@7.3.0
+yarn global add firebase-tools@9.16.0
 
 cd server
 yarn install
@@ -13,9 +13,7 @@ yarn lint && yarn validate
 ```
 
 ## Running the tests
-If you want to run the cloud function tests, you **must** set a local firebase project that corresponds to the [project id found here](./server/test-helpers/firestore-helpers.ts#L19)
-
-If you don't both use and specify an actual project id, cloud functions won't trigger in response to database writes. This tidbit slowed me down for the longest time, and I've confirmed it as expected behavior with firestore support.
+The `project-id` used to cause a bunch of headaches for testing, but no longer! Check out [this section](https://medium.com/geekculture/updated-cloud-firestore-testing-guide-ce146f2b312#c512) of the guide for more details.
 
 ```bash
 yarn test

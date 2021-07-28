@@ -1,23 +1,19 @@
-import * as firebase from '@firebase/testing';
-
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
+import { Collections } from '@test-helpers/constants';
 import {
-  COLLECTIONS,
   documentPath,
+  generateId,
   generateMockDocument,
   generateMockUpdateDocument,
-  generateId,
   generateSecurityRecordAny,
   generateSecurityRecordOwner,
   generateUserId,
   membershipPath,
-} from '../../test-helpers/contants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+} from '@test-helpers/documents';
+import { setup, teardown } from '@test-helpers/firestore';
+import { Firestore } from '@test-helpers/types';
 
-const COLLECTION = COLLECTIONS.HOMESTEADS;
+const COLLECTION = Collections.Homesteads;
 const DOC_ID_1 = generateId();
 const DOC_ID_2 = generateId();
 const USER_ID = generateUserId();
@@ -30,41 +26,33 @@ describe('/homesteads/update', () => {
       db = await setup(USER_ID, {
         [documentPath(COLLECTION, DOC_ID_1)]: generateMockDocument(),
         [documentPath(COLLECTION, DOC_ID_2)]: generateMockDocument(),
-        [membershipPath(
-          COLLECTION,
-          DOC_ID_1,
-          USER_ID
-        )]: generateSecurityRecordOwner(),
-        [membershipPath(
-          COLLECTION,
-          DOC_ID_2,
-          USER_ID
-        )]: generateSecurityRecordAny(),
+        [membershipPath(COLLECTION, DOC_ID_1, USER_ID)]:
+          generateSecurityRecordOwner(),
+        [membershipPath(COLLECTION, DOC_ID_2, USER_ID)]:
+          generateSecurityRecordAny(),
       });
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow without an owner membership role', async () => {
+    test('disallow without an owner membership role', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_2);
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
 
-    test('disallow without an existing record', async () => {
+    test('disallow without an existing record', () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
 
-    test('disallow without a membership record', async () => {
+    test('disallow without a membership record', () => {
       const document = db.collection(COLLECTION).doc(generateId());
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
 
-    test('allow with an owner membership role', async () => {
+    test('allow with an owner membership role', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await firebase.assertSucceeds(
-        document.update(generateMockUpdateDocument())
-      );
+      return assertSucceeds(document.update(generateMockUpdateDocument()));
     });
   });
 
@@ -73,11 +61,11 @@ describe('/homesteads/update', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID_1);
-      await firebase.assertFails(document.update(generateMockUpdateDocument()));
+      return assertFails(document.update(generateMockUpdateDocument()));
     });
   });
 });

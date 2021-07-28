@@ -8,7 +8,7 @@ const readFile = util.promisify(fs.readFile);
  * Doing so globally will prevent the filesystem from being accessed
  * (at least with regard to pulling the configuration) repeatedly.
  */
-export default async function globalJestSetup() {
+export default async function globalJestSetup(): Promise<void> {
   const configFile = await readFile('./firebase.json');
   const config = JSON.parse(configFile.toString());
 

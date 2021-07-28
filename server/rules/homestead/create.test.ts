@@ -1,21 +1,16 @@
-import * as firebase from '@firebase/testing';
-
+import { assertFails, assertSucceeds } from '@firebase/rules-unit-testing';
+import { Collections } from '@test-helpers/constants';
 import {
-  COLLECTIONS,
   documentPath,
+  generateId,
   generateMockDocument,
   generateMockUpdateDocument,
-  generateId,
   generateUserId,
-} from '../../test-helpers/contants';
-import {
-  Firestore,
-  getAdminApp,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+} from '@test-helpers/documents';
+import { getAdminApp, setup, teardown } from '@test-helpers/firestore';
+import { Firestore } from '@test-helpers/types';
 
-const COLLECTION = COLLECTIONS.HOMESTEADS;
+const COLLECTION = Collections.Homesteads;
 const DOC_ID = generateId();
 const USER_ID = generateUserId();
 
@@ -25,32 +20,32 @@ describe('/homesteads/create', () => {
   describe('authenticated', () => {
     beforeAll(async () => {
       db = await setup(USER_ID, {
-        [documentPath(COLLECTIONS.USERS, USER_ID)]: generateMockDocument(),
+        [documentPath(Collections.Users, USER_ID)]: generateMockDocument(),
       });
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
     test('disallow if a homestead has already been created', async () => {
-      const adminDb = getAdminApp();
+      const adminDb = getAdminApp().firestore();
       await adminDb
-        .collection(COLLECTIONS.USERS)
+        .collection(Collections.Users)
         .doc(USER_ID)
         .update({ ownedHomestead: generateId() });
 
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockUpdateDocument()));
+      return assertFails(document.set(generateMockUpdateDocument()));
     });
 
     test('allow if a homestead has not already been created', async () => {
-      const adminDb = getAdminApp();
+      const adminDb = getAdminApp().firestore();
       await adminDb
-        .collection(COLLECTIONS.USERS)
+        .collection(Collections.Users)
         .doc(USER_ID)
         .update({ ownedHomestead: '' });
 
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertSucceeds(document.set(generateMockUpdateDocument()));
+      return assertSucceeds(document.set(generateMockUpdateDocument()));
     });
   });
 
@@ -59,11 +54,11 @@ describe('/homesteads/create', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.set(generateMockUpdateDocument()));
+      return assertFails(document.set(generateMockUpdateDocument()));
     });
   });
 });

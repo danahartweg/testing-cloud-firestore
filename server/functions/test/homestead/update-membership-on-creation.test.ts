@@ -1,17 +1,8 @@
-import { waitForCloudFunctionExecution } from '../../helpers/wait';
-import {
-  COLLECTIONS,
-  documentPath,
-  generateUserId,
-} from '../../../test-helpers/contants';
-import {
-  DocumentReference,
-  Firestore,
-  getAdminApp,
-  setup,
-  setUseRealProjectId,
-  teardown,
-} from '../../../test-helpers/firestore-helpers';
+import { waitForCloudFunctionExecution } from '@helpers/wait';
+import { AdminFirestore, DocumentReference } from '@test-helpers/types';
+import { Collections } from '@test-helpers/constants';
+import { documentPath, generateUserId } from '@test-helpers/documents';
+import { getAdminApp, setup, teardown } from '@test-helpers/firestore';
 
 const USER_ID = generateUserId();
 
@@ -19,32 +10,30 @@ describe('updateMembershipOnHomesteadCreation', () => {
   const homesteadName = 'Test Homestead';
   const userName = 'Test User';
 
-  let db: Firestore;
+  let db: AdminFirestore;
   let homesteadRef: DocumentReference;
 
   beforeAll(async () => {
-    setUseRealProjectId();
-
     await setup(USER_ID, {
-      [documentPath(COLLECTIONS.USERS, USER_ID)]: {
+      [documentPath(Collections.Users, USER_ID)]: {
         displayName: userName,
       },
     });
 
-    db = getAdminApp();
+    db = getAdminApp().firestore();
 
     homesteadRef = await db
-      .collection(COLLECTIONS.HOMESTEADS)
+      .collection(Collections.Homesteads)
       .add({ name: homesteadName, owner: USER_ID });
 
     return waitForCloudFunctionExecution();
   });
 
-  afterAll(() => teardown());
+  afterAll(teardown);
 
   test('updates the user with the homestead name', async () => {
     const userDocument = await db
-      .collection(COLLECTIONS.USERS)
+      .collection(Collections.Users)
       .doc(USER_ID)
       .get();
 
@@ -54,7 +43,7 @@ describe('updateMembershipOnHomesteadCreation', () => {
 
   test('sets the current user as the homestead owner', async () => {
     const membershipRecord = await db
-      .collection(COLLECTIONS.HOMESTEADS)
+      .collection(Collections.Homesteads)
       .doc(homesteadRef.id)
       .collection('members')
       .doc(USER_ID)

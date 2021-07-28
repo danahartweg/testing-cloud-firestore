@@ -1,37 +1,32 @@
-import * as uuid from 'uuid/v4';
+import { v4 as uuid } from 'uuid';
 
-type Collections =
-  | 'catchAlls'
-  | 'homesteads'
-  | 'users';
+import { Collections } from './constants';
 
-export enum COLLECTIONS {
-  CATCH_ALL = 'catchAlls',
-  HOMESTEADS = 'homesteads',
-  USERS = 'users',
-}
+type Data = Record<string, unknown>;
 
-export function generateMockDocument(data: Object = {}): Object {
+export function generateMockDocument(data: Data = {}): Data {
   return { name: 'document name', ...data };
 }
 
-export function generateMockUpdateDocument(data: Object = {}): Object {
+export function generateMockUpdateDocument(data: Data = {}): Data {
   return { name: 'updated document name', ...data };
 }
 
-export function generateMockDocumentWithHomesteadId(homesteadId: string) {
+export function generateMockDocumentWithHomesteadId(homesteadId: string): Data {
   return generateMockDocument({ homesteadId });
 }
 
-export function generateMockUpdateDocumentWithHomesteadId(homesteadId: string) {
+export function generateMockUpdateDocumentWithHomesteadId(
+  homesteadId: string
+): Data {
   return generateMockUpdateDocument({ homesteadId });
 }
 
-export function generateSecurityRecordAny(): Object {
+export function generateSecurityRecordAny(): Data {
   return { role: 'any' };
 }
 
-export function generateSecurityRecordOwner(): Object {
+export function generateSecurityRecordOwner(): Data {
   return { role: 'owner' };
 }
 

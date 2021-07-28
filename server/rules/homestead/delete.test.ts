@@ -1,19 +1,15 @@
-import * as firebase from '@firebase/testing';
-
+import { assertFails } from '@firebase/rules-unit-testing';
+import { Collections } from '@test-helpers/constants';
 import {
-  COLLECTIONS,
   generateId,
-  generateSecurityRecordOwner,
   generateUserId,
+  generateSecurityRecordOwner,
   membershipPath,
-} from '../../test-helpers/contants';
-import {
-  Firestore,
-  setup,
-  teardown,
-} from '../../test-helpers/firestore-helpers';
+} from '@test-helpers/documents';
+import { setup, teardown } from '@test-helpers/firestore';
+import { Firestore } from '@test-helpers/types';
 
-const COLLECTION = COLLECTIONS.HOMESTEADS;
+const COLLECTION = Collections.Homesteads;
 const DOC_ID = generateId();
 const USER_ID = generateUserId();
 
@@ -23,19 +19,16 @@ describe('/homesteads/delete', () => {
   describe('authenticated', () => {
     beforeAll(async () => {
       db = await setup(USER_ID, {
-        [membershipPath(
-          COLLECTION,
-          DOC_ID,
-          USER_ID
-        )]: generateSecurityRecordOwner(),
+        [membershipPath(COLLECTION, DOC_ID, USER_ID)]:
+          generateSecurityRecordOwner(),
       });
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      return assertFails(document.delete());
     });
   });
 
@@ -44,11 +37,11 @@ describe('/homesteads/delete', () => {
       db = await setup();
     });
 
-    afterAll(() => teardown());
+    afterAll(teardown);
 
-    test('disallow', async () => {
+    test('disallow', () => {
       const document = db.collection(COLLECTION).doc(DOC_ID);
-      await firebase.assertFails(document.delete());
+      return assertFails(document.delete());
     });
   });
 });

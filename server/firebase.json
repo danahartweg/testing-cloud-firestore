@@ -1,11 +1,15 @@
 {
   "emulators": {
+    "auth": {
+      "host": "localhost",
+      "port": "9099"
+    },
     "firestore": {
-      "host": "127.0.0.1",
+      "host": "localhost",
       "port": "8080"
     },
     "functions": {
-      "host": "127.0.0.1",
+      "host": "localhost",
       "port": "5001"
     }
   },
@@ -13,6 +17,6 @@
     "rules": "rules/firestore.rules"
   },
   "functions": {
-    "predeploy": ["yarn build:functions"]
+    "predeploy": ["yarn lint", "yarn build:functions"]
   }
 }
